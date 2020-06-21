@@ -14,3 +14,11 @@ Proof.
   rewrite interp_id_h.
   reflexivity.
 Qed.
+
+Parameter IO : Type -> Type.
+Parameter exit : forall {a}, IO a.
+Declare Instance Monad_IO : Monad IO.
+Declare Instance MonadIter_IO : MonadIter IO.
+
+Definition execute {E T} (m : itree E T) : IO T :=
+  interp (M := IO) (fun _ _ => exit) m.
